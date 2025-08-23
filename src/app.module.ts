@@ -16,6 +16,7 @@ import { Company } from './companies/entities/company.entity';
 import { Branch } from './branches/entities/branch.entity';
 import { AdminHierarchy } from './admin-hierarchies/entities/admin-hierarchy.entity';
 import { JwtModule } from '@nestjs/jwt';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -50,7 +51,8 @@ import { JwtModule } from '@nestjs/jwt';
   PermissionsModule,
   CompaniesModule, 
   BranchesModule,
-  AdminHierarchiesModule
+  AdminHierarchiesModule,
+  AuthModule
 ],
   controllers: [AppController],
   providers: [AppService],
