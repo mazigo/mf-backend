@@ -18,7 +18,7 @@ export class Permission {
   @Column()
   updatedAt: Date;
 
-  @Column()
+  @Column({ default: true })
   is_active: boolean;
 
 }

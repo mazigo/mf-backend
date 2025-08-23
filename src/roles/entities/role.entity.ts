@@ -23,6 +23,6 @@ export class Role {
   @Column()
   updatedAt: Date;
 
-  @Column()
+  @Column({ default: true })
   is_active: boolean;
 }

@@ -31,7 +31,7 @@ export class Branch {
   @Column()
   updatedAt: Date;
 
-  @Column()
+  @Column({ default: true })
   is_active: boolean;
 
   @OneToOne(() => User, { nullable: true }) // nullable: true allows a branch to exist without a user
