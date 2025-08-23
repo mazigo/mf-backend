@@ -34,9 +34,9 @@ export class Branch {
   @Column({ default: true })
   is_active: boolean;
 
-  @OneToOne(() => User, { nullable: true }) // nullable: true allows a branch to exist without a user
-  @JoinColumn() // This decorator is used on the owning side to create the foreign key column
-  manager: User; // This will reference the User entity
+  @OneToOne(() => User, { nullable: true })
+  @JoinColumn() 
+  manager: User; 
 
   @ManyToOne(() => Company, (company) => company.branches)
   company: Company;
