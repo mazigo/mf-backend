@@ -15,10 +15,13 @@ import { Permission } from './permissions/entities/permission.entity';
 import { Company } from './companies/entities/company.entity';
 import { Branch } from './branches/entities/branch.entity';
 import { AdminHierarchy } from './admin-hierarchies/entities/admin-hierarchy.entity';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true, // Make ConfigModule available globally
+    }),
     TypeOrmModule.forRootAsync({
       imports:[ConfigModule],
       useFactory: (configService: ConfigService)=>({
@@ -33,6 +36,15 @@ import { AdminHierarchy } from './admin-hierarchies/entities/admin-hierarchy.ent
       }),
       inject:[ConfigService]
   }),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: { expiresIn: configService.get<string>('JWT_EXPIRES_IN', '3600s') },
+      }),
+      inject: [ConfigService],
+      global: true,
+    }),
   UsersModule,
   RolesModule,
   PermissionsModule,
