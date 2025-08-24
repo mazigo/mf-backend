@@ -1,8 +1,9 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { User } from "src/users/entities/user.entity";
 import { Branch } from 'src/branches/entities/branch.entity';
+import { BaseEntity } from 'src/utils/base.entity';
 @Entity('companies')
-export class Company {
+export class Company extends BaseEntity{
     @PrimaryGeneratedColumn()
   id: number;
 
@@ -14,13 +15,6 @@ export class Company {
 
   @OneToMany(() => Branch, (branch) => branch.company)
   branches: Branch[];
-
-  @Column()
-  createdAt: Date;
-
-  @Column()
-  updatedAt: Date;
-
   @Column({ default: true })
   is_active: boolean;
 }

@@ -8,20 +8,22 @@ import { PermissionsModule } from './permissions/permissions.module';
 import { CompaniesModule } from './companies/companies.module';
 import { BranchesModule } from './branches/branches.module';
 import { AdminHierarchiesModule } from './admin-hierarchies/admin-hierarchies.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { User } from './users/entities/user.entity';
-import { Role } from './roles/entities/role.entity';
-import { Permission } from './permissions/entities/permission.entity';
-import { Company } from './companies/entities/company.entity';
-import { Branch } from './branches/entities/branch.entity';
+import { ConfigModule, ConfigService } from '@nestjs/config'; 
+import { Role } from 'src/roles/entities/role.entity';
+import { Permission } from 'src/permissions/entities/permission.entity';
+import { Company } from 'src/companies/entities/company.entity';
+import { Branch } from 'src/branches/entities/branch.entity';
 import { AdminHierarchy } from './admin-hierarchies/entities/admin-hierarchy.entity';
-import { JwtModule } from '@nestjs/jwt';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 import { AuthModule } from './auth/auth.module';
+import { SeederModule } from './seeder/seeder.module';
+import { User } from 'src/users/entities/user.entity';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true, // Make ConfigModule available globally
+      isGlobal: true,
+      envFilePath: '.env',
     }),
     TypeOrmModule.forRootAsync({
       imports:[ConfigModule],
@@ -37,13 +39,9 @@ import { AuthModule } from './auth/auth.module';
       }),
       inject:[ConfigService]
   }),
-    JwtModule.registerAsync({
-      imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET'),
-        signOptions: { expiresIn: configService.get<string>('JWT_EXPIRES_IN', '3600s') },
-      }),
-      inject: [ConfigService],
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '3600s' },
       global: true,
     }),
   UsersModule,
@@ -52,9 +50,21 @@ import { AuthModule } from './auth/auth.module';
   CompaniesModule, 
   BranchesModule,
   AdminHierarchiesModule,
-  AuthModule
+  AuthModule,
+  SeederModule
 ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  // constructor(jwtService: JwtService) {
+  //   console.log('AppModule initialized with JWT_SECRET:', process.env.JWT_SECRET);
+  //   try {
+  //     const testPayload = { sub: 'test' };
+  //     const token = jwtService.sign(testPayload);
+  //     console.log('Test JWT generated in AppModule:', token);
+  //   } catch (error) {
+  //     console.error('Error signing test JWT in AppModule:', error);
+  //   }
+  // }
+}

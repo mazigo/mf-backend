@@ -1,7 +1,8 @@
+import { BaseEntity } from 'src/utils/base.entity';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity('admin_hierarchies')
-export class AdminHierarchy {
+export class AdminHierarchy extends BaseEntity{
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -16,12 +17,7 @@ export class AdminHierarchy {
 
   @Column()
   admin_level: number;
-
-  @Column()
-  createdAt: Date;
-
-  @Column()
-  updatedAt: Date;
+ 
 
   @Column()
   is_active: boolean;

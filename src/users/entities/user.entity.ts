@@ -1,8 +1,9 @@
 import { Company } from 'src/companies/entities/company.entity';
 import { Role } from 'src/roles/entities/role.entity';
+import { BaseEntity } from 'src/utils/base.entity';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany,ManyToOne, JoinTable } from 'typeorm';
 @Entity('users')
-export class User {
+export class User extends BaseEntity{
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
@@ -20,13 +21,7 @@ export class User {
   roles: Role[];
 
   @ManyToOne(() => Company, (company) => company.users)
-  company: Company;
-
-  @Column()
-  createdAt: Date;
-
-  @Column()
-  updatedAt: Date;
+  company: Company; 
 
   @Column({ default: true })
   is_active: boolean;

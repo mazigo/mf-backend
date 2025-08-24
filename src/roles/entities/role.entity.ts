@@ -1,9 +1,10 @@
 import { Permission } from 'src/permissions/entities/permission.entity';
 import { User } from 'src/users/entities/user.entity';
+import { BaseEntity } from 'src/utils/base.entity';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from 'typeorm';
 
 @Entity('roles')
-export class Role {
+export class Role extends BaseEntity{
     @PrimaryGeneratedColumn()
   id: number;
 
@@ -16,13 +17,7 @@ export class Role {
 
   @ManyToMany(() => User, (user) => user.roles)
   users: User[];
-
-  @Column()
-  createdAt: Date;
-
-  @Column()
-  updatedAt: Date;
-
+ 
   @Column({ default: true })
   is_active: boolean;
 }
