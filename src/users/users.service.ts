@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -19,7 +19,7 @@ export class UsersService {
     private readonly roleRepository: Repository<Role>,
   ){}
 
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto, currentUser: User) {
     const { companyId,email, roleIds, password, ...rest } = createUserDto;
     // Check if email already exists
     const existingUser = await this.userRepository.findOneBy({ email });
@@ -32,6 +32,14 @@ export class UsersService {
     if (!company) {
       throw new NotFoundException('Company not found');
     }
+
+    if (
+      currentUser.roles.some(role => role.name === 'company_admin') &&
+      currentUser.company.id !== companyId
+    ) {
+      throw new ForbiddenException('Company admins can only create users for their own company');
+    }
+
     let roles= [];
     if (roleIds && roleIds.length > 0) {
     let roles = await this.roleRepository.findByIds(roleIds);
@@ -55,12 +63,16 @@ export class UsersService {
   }
 
   async findAll() {
-  return this.userRepository.find({ relations: ['company', 'roles'] });
+  return this.userRepository.find({
+    select: ['id', 'fullName', 'email', 'is_active', 'createdAt', 'updatedAt'],
+     relations: ['company', 'roles']
+     });
   }
 
   async findOne(id: string) {
     const user = await this.userRepository.findOne({
       where: { id },
+      select: ['id', 'fullName', 'email', 'is_active', 'createdAt', 'updatedAt'],
       relations: ['company', 'roles', 'roles.permissions'],
     });
     if (!user) {

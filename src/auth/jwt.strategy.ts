@@ -21,6 +21,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     if (!user) {
       throw new UnauthorizedException();
     }
-    return { id: user.id, email: user.email, roles: user.roles };
+    const result = {
+      id: user.id,
+      email: user.email,
+      roles: payload.roles, // Use roles from JWT payload
+    };
+    return result;
   }
 }

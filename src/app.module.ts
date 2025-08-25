@@ -18,6 +18,14 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { AuthModule } from './auth/auth.module';
 import { SeederModule } from './seeder/seeder.module';
 import { User } from 'src/users/entities/user.entity';
+import { CollateralTypesModule } from './collateral-types/collateral-types.module';
+import { InterestTypeModule } from './interest-type/interest-type.module';
+import { InterestRateModule } from './interest-rate/interest-rate.module';
+import { ProcessingFeeModule } from './processing-fee/processing-fee.module';
+import { GuarantorsModule } from './guarantors/guarantors.module';
+import { CustomersModule } from './customers/customers.module';
+import { LoanTypesModule } from './loan-types/loan-types.module';
+import { LoanPurposesModule } from './loan-purposes/loan-purposes.module';
 
 @Module({
   imports: [
@@ -51,7 +59,15 @@ import { User } from 'src/users/entities/user.entity';
   BranchesModule,
   AdminHierarchiesModule,
   AuthModule,
-  SeederModule
+  SeederModule,
+  CollateralTypesModule,
+  InterestTypeModule,
+  InterestRateModule,
+  ProcessingFeeModule,
+  GuarantorsModule,
+  CustomersModule,
+  LoanTypesModule,
+  LoanPurposesModule
 ],
   controllers: [AppController],
   providers: [AppService],
