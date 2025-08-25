@@ -4,10 +4,7 @@ import { BaseEntity } from 'src/utils/base.entity';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from 'typeorm';
 
 @Entity('roles')
-export class Role extends BaseEntity{
-    @PrimaryGeneratedColumn()
-  id: number;
-
+export class Role extends BaseEntity{ 
   @Column({ unique: true })
   name: string; // e.g., 'admin', 'user'
 
@@ -16,8 +13,5 @@ export class Role extends BaseEntity{
   permissions: Permission[];
 
   @ManyToMany(() => User, (user) => user.roles)
-  users: User[];
- 
-  @Column({ default: true })
-  is_active: boolean;
+  users: User[]; 
 }

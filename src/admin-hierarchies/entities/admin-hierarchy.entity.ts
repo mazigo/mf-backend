@@ -2,10 +2,7 @@ import { BaseEntity } from 'src/utils/base.entity';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity('admin_hierarchies')
-export class AdminHierarchy extends BaseEntity{
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class AdminHierarchy extends BaseEntity{ 
   @Column()
   name: string;
 
@@ -13,14 +10,10 @@ export class AdminHierarchy extends BaseEntity{
   code: string;
 
   @Column({ nullable: true })
-  parent_id: number;
+  parent_id: string;
 
   @Column()
-  admin_level: number;
- 
-
-  @Column()
-  is_active: boolean;
+  admin_level: number; 
 
   // Self-referencing ManyToOne relationship (a hierarchy can have one parent)
   @ManyToOne(() => AdminHierarchy, (adminHierarchy) => adminHierarchy.children, {

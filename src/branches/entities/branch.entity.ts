@@ -5,11 +5,7 @@ import { BaseEntity } from 'src/utils/base.entity';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, JoinColumn } from 'typeorm';
 
 @Entity('branches')
-export class Branch extends BaseEntity{
-
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class Branch extends BaseEntity{ 
   @Column()
   name: string;
 
@@ -24,12 +20,7 @@ export class Branch extends BaseEntity{
   phone: string;
 
   @Column()
-  email: string;
-
-   
-
-  @Column({ default: true })
-  is_active: boolean;
+  email: string; 
 
   @OneToOne(() => User, { nullable: true })
   @JoinColumn() 
