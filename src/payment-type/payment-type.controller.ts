@@ -30,20 +30,20 @@ export class PaymentTypeController {
       @UseGuards(PermissionsGuard)
       @Permissions('read:payment-type')
   findOne(@Param('id') id: string) {
-    return this.paymentTypeService.findOne(+id);
+    return this.paymentTypeService.findOne(id);
   }
 
   @Patch(':id')
       @UseGuards(PermissionsGuard)
       @Permissions('update:payment-type')
   update(@Param('id') id: string, @Body() updatePaymentTypeDto: UpdatePaymentTypeDto) {
-    return this.paymentTypeService.update(+id, updatePaymentTypeDto);
+    return this.paymentTypeService.update(id, updatePaymentTypeDto);
   }
 
   @Delete(':id')
       @UseGuards(PermissionsGuard)
       @Permissions('delete:payment-type')
   remove(@Param('id') id: string) {
-    return this.paymentTypeService.remove(+id);
+    return this.paymentTypeService.delete(id);
   }
 }
