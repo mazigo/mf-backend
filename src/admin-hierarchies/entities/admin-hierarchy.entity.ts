@@ -1,32 +1,31 @@
 import { Customer } from 'src/customers/entities/customer.entity';
 import { BaseEntity } from 'src/utils/base.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, Column, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('admin_hierarchies')
 export class AdminHierarchy extends BaseEntity{ 
+   
   @Column()
   name: string;
 
   @Column()
   code: string;
 
-  @Column({ nullable: true })
-  parent_id: string;
+  @Column({ type: 'varchar', nullable: true })
+  parent_id: string | null;
 
   @Column()
-  admin_level: number; 
+  admin_level: number;
 
-  @OneToMany(() => Customer,(customer)=>customer.adminHierarchy)
+  @OneToMany(() => Customer, (customer) => customer.adminHierarchy)
   customers: Customer[];
 
-  // Self-referencing ManyToOne relationship (a hierarchy can have one parent)
   @ManyToOne(() => AdminHierarchy, (adminHierarchy) => adminHierarchy.children, {
     nullable: true,
-    onDelete: 'SET NULL', // Optional: Set parent_id to NULL if parent is deleted
+    onDelete: 'SET NULL',
   })
-  parent: AdminHierarchy;
+  parent: AdminHierarchy | null;
 
-  // Self-referencing OneToMany relationship (a hierarchy can have many children)
   @OneToMany(() => AdminHierarchy, (adminHierarchy) => adminHierarchy.parent)
   children: AdminHierarchy[];
 }

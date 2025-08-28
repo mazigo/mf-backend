@@ -15,7 +15,7 @@ export class UpdateAdminHierarchyDto extends PartialType(CreateAdminHierarchyDto
 
   @IsInt()
   @IsOptional()
-  parentId?: number;
+  parentId?: string;
 
   @IsInt()
   @IsNotEmpty()

@@ -11,7 +11,7 @@ export class Branch extends BaseEntity{
 
   @OneToOne(() => AdminHierarchy, { nullable: true })
   @JoinColumn()
-  location: AdminHierarchy;
+  location: AdminHierarchy | null;
 
   @Column()
   address: string;
@@ -24,7 +24,7 @@ export class Branch extends BaseEntity{
 
   @OneToOne(() => User, { nullable: true })
   @JoinColumn() 
-  manager: User; 
+  manager: User | null; 
 
   @ManyToOne(() => Company, (company) => company.branches)
   company: Company;

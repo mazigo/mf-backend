@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -23,19 +23,36 @@ async  create(createCompanyDto: CreateCompanyDto) {
     return this.companyRepository.save(company);
   }
 
-  findAll() {
-    return `This action returns all companies`;
+async  findAll(): Promise<Company[]> {
+    return await this.companyRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} company`;
+async  findOne(id: string): Promise<Company> {
+    const company = await this.companyRepository.findOne({where: {id}});
+    if(!company){
+      throw new NotFoundException(`Company with ID ${id} not found`);
+    }
+    return company;
   }
 
-  update(id: number, updateCompanyDto: UpdateCompanyDto) {
-    return `This action updates a #${id} company`;
+async  update(id: string, updateCompanyDto: UpdateCompanyDto): Promise<Company> {
+  const comp = await this.findOne(id);
+    
+    if (updateCompanyDto.name && updateCompanyDto.name !== comp.name) {
+      const existingLoanType = await this.companyRepository.findOne({
+        where: { name: updateCompanyDto.name },
+      });
+      if (existingLoanType) {
+        throw new NotFoundException(`Company with name ${updateCompanyDto.name} already exists`);
+      }
+    }
+
+    Object.assign(comp, updateCompanyDto);
+    return await this.companyRepository.save(comp);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} company`;
+async remove(id: string): Promise<void> {
+    const comp = await this.findOne(id);
+    await this.companyRepository.remove(comp);
   }
 }

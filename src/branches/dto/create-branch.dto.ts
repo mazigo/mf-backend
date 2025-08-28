@@ -1,35 +1,28 @@
 import { IsString, IsNotEmpty, IsEmail, IsInt, IsUUID, IsOptional, IsBoolean, Matches } from 'class-validator';
 export class CreateBranchDto {
-    @IsString()
-  @IsNotEmpty()
+   @IsString()
   name: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
+  locationId?: string;
+
+  @IsString()
   address: string;
 
   @IsString()
-  @IsNotEmpty()
-  @Matches(/^\+?[1-9]\d{1,14}$/, { message: 'Phone number must be a valid international phone number (e.g., +255234567890)' })
   phone: string;
 
   @IsEmail()
-  @IsNotEmpty()
   email: string;
 
-  @IsInt()
+  @IsString()
   @IsOptional()
-  locationId?: number;
-
-  @IsUUID()
-  @IsOptional()
-  managerId?: string;
+  managerId?: string; 
 
   @IsString()
-  @IsNotEmpty()
-  companyId: string;
+  companyId: string; 
 
-  @IsBoolean()
-  @IsOptional()
-  is_active?: boolean;
+  @IsString()
+  userId: string; 
 }

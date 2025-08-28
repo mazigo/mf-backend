@@ -3,39 +3,34 @@ import { CreateBranchDto } from './create-branch.dto';
 import { IsString, IsNotEmpty, IsEmail, IsInt, IsUUID, IsOptional, IsBoolean, Matches } from 'class-validator';
 export class UpdateBranchDto extends PartialType(CreateBranchDto) {
   @IsString()
-  @IsNotEmpty()
   @IsOptional()
   name?: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
+  locationId?: string; 
+
+  @IsString()
   @IsOptional()
   address?: string;
 
   @IsString()
-  @IsNotEmpty()
   @IsOptional()
-  @Matches(/^\+?[1-9]\d{1,14}$/, { message: 'Phone number must be a valid international phone number (e.g., +255234567890)' })
   phone?: string;
 
   @IsEmail()
-  @IsNotEmpty()
   @IsOptional()
   email?: string;
 
-  @IsInt()
+  @IsString()
   @IsOptional()
-  locationId?: number;
-
-  @IsUUID()
-  @IsOptional()
-  managerId?: string;
+  managerId?: string; 
 
   @IsString()
   @IsOptional()
   companyId?: string;
 
-  @IsBoolean()
+  @IsString()
   @IsOptional()
-  is_active?: boolean;
+  userId?: string;
 }

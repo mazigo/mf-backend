@@ -11,7 +11,7 @@ export class CreateAdminHierarchyDto {
 
   @IsInt()
   @IsOptional()
-  parentId?: number;
+  parentId?: string;
 
   @IsInt()
   @IsNotEmpty()
