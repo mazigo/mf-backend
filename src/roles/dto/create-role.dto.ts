@@ -8,7 +8,12 @@ export class CreateRoleDto {
   @IsArray()
   @IsInt({ each: true })
   @IsOptional()
-  permissionIds?: number[];
+  permissionIds?: string[];
+  
+  @IsArray()
+  @IsInt({ each: true })
+  @IsOptional()
+  userIds?: string[];
 
   @IsBoolean()
   @IsOptional()

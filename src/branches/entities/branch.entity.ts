@@ -2,7 +2,7 @@ import { AdminHierarchy } from 'src/admin-hierarchies/entities/admin-hierarchy.e
 import { Company } from 'src/companies/entities/company.entity';
 import { User } from 'src/users/entities/user.entity';
 import { BaseEntity } from 'src/utils/base.entity';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, JoinColumn, OneToMany } from 'typeorm';
 
 @Entity('branches')
 export class Branch extends BaseEntity{ 
@@ -28,4 +28,8 @@ export class Branch extends BaseEntity{
 
   @ManyToOne(() => Company, (company) => company.branches)
   company: Company;
+  
+  @OneToOne(() => User, (user) => user.branch)
+  @JoinColumn()
+  users: User;
 }

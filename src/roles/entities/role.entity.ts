@@ -7,6 +7,9 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from 't
 export class Role extends BaseEntity{ 
   @Column({ unique: true })
   name: string; // e.g., 'admin', 'user'
+  
+  @Column()
+  description: string; 
 
   @ManyToMany(() => Permission)
   @JoinTable()

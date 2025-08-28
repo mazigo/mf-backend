@@ -19,16 +19,16 @@ export class InterestRateController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.interestRateService.findOne(+id);
+    return this.interestRateService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateInterestRateDto: UpdateInterestRateDto) {
-    return this.interestRateService.update(+id, updateInterestRateDto);
+    return this.interestRateService.update(id, updateInterestRateDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.interestRateService.remove(+id);
+    return this.interestRateService.remove(id);
   }
 }

@@ -19,16 +19,16 @@ export class ProcessingFeeController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.processingFeeService.findOne(+id);
+    return this.processingFeeService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateProcessingFeeDto: UpdateProcessingFeeDto) {
-    return this.processingFeeService.update(+id, updateProcessingFeeDto);
+    return this.processingFeeService.update(id, updateProcessingFeeDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.processingFeeService.remove(+id);
+    return this.processingFeeService.remove(id);
   }
 }

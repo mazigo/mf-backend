@@ -26,6 +26,24 @@ import { GuarantorsModule } from './guarantors/guarantors.module';
 import { CustomersModule } from './customers/customers.module';
 import { LoanTypesModule } from './loan-types/loan-types.module';
 import { LoanPurposesModule } from './loan-purposes/loan-purposes.module';
+import { AdditionalInfoModule } from './customers/additional-info/additional-info.module';
+import { BankingInfoModule } from './customers/banking-info/banking-info.module';
+import { EmploymentInfoModule } from './customers/employment-info/employment-info.module';
+import { NextOfKinInfoModule } from './customers/next-of-kin-info/next-of-kin-info.module';
+import { CollateralType } from './collateral-types/entities/collateral-type.entity';
+import { Customer } from './customers/entities/customer.entity';
+import { AdditionalInfo } from './customers/entities/additional.entity';
+import { EmploymentInfo } from './customers/entities/employment.entity';
+import { BankingInfo } from './customers/entities/banking.entity';
+import { NextOfKinInfo } from './customers/entities/next_of_kin.entity';
+import { InterestRate } from './interest-rate/entities/interest-rate.entity';
+import { InterestType } from './interest-type/entities/interest-type.entity';
+import { Guarantor } from './guarantors/entities/guarantor.entity';
+import { ProcessingFee } from './processing-fee/entities/processing-fee.entity';
+import { LoanPurpose } from './loan-purposes/entities/loan-purpose.entity';
+import { LoanType } from './loan-types/entities/loan-type.entity';
+import { PaymentMethodModule } from './payment-method/payment-method.module';
+import { PaymentTypeModule } from './payment-type/payment-type.module';
 
 @Module({
   imports: [
@@ -43,7 +61,27 @@ import { LoanPurposesModule } from './loan-purposes/loan-purposes.module';
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME','mf_db'),
         synchronize: configService.get('DB_SYNC',true),
-        entities:[User,Role,Permission,Company,Branch,AdminHierarchy]
+        entities:[
+          User,
+          Role,
+          Permission,
+          Company,
+          Branch,
+          AdminHierarchy,
+          CollateralType,
+          Customer,
+          AdditionalInfo,
+          EmploymentInfo,
+          BankingInfo,
+          NextOfKinInfo,
+          InterestRate,
+          InterestType,
+          Guarantor,
+          ProcessingFee,
+          LoanPurpose,
+          LoanType,
+          
+        ]
       }),
       inject:[ConfigService]
   }),
@@ -67,20 +105,16 @@ import { LoanPurposesModule } from './loan-purposes/loan-purposes.module';
   GuarantorsModule,
   CustomersModule,
   LoanTypesModule,
-  LoanPurposesModule
+  LoanPurposesModule,
+  BankingInfoModule,
+  EmploymentInfoModule,
+  NextOfKinInfoModule,
+  AdditionalInfoModule,
+  PaymentMethodModule,
+  PaymentTypeModule
 ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {
-  // constructor(jwtService: JwtService) {
-  //   console.log('AppModule initialized with JWT_SECRET:', process.env.JWT_SECRET);
-  //   try {
-  //     const testPayload = { sub: 'test' };
-  //     const token = jwtService.sign(testPayload);
-  //     console.log('Test JWT generated in AppModule:', token);
-  //   } catch (error) {
-  //     console.error('Error signing test JWT in AppModule:', error);
-  //   }
-  // }
+export class AppModule { 
 }

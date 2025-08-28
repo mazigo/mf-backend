@@ -6,9 +6,10 @@ import { User } from './entities/user.entity';
 import { Company } from 'src/companies/entities/company.entity';
 import { Role } from 'src/roles/entities/role.entity';
 import { AuthModule } from 'src/auth/auth.module';
+import { Branch } from 'src/branches/entities/branch.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Company, Role]), AuthModule],
+  imports: [TypeOrmModule.forFeature([User,Company,Branch, Role]), AuthModule],
   providers: [UsersService],
   controllers: [UsersController],
   exports: [UsersService],

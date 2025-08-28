@@ -11,7 +11,9 @@ export class UpdateRoleDto extends PartialType(CreateRoleDto) {
   @IsArray()
   @IsInt({ each: true })
   @IsOptional()
-  permissionIds?: number[];
+  permissionIds?: string[];
+
+  userIds?: string[];
 
   @IsBoolean()
   @IsOptional()

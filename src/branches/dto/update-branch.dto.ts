@@ -31,9 +31,9 @@ export class UpdateBranchDto extends PartialType(CreateBranchDto) {
   @IsOptional()
   managerId?: string;
 
-  @IsInt()
+  @IsString()
   @IsOptional()
-  companyId?: number;
+  companyId?: string;
 
   @IsBoolean()
   @IsOptional()

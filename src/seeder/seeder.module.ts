@@ -7,9 +7,10 @@ import { Role } from 'src/roles/entities/role.entity';
 import { User } from 'src/users/entities/user.entity';
 import { SeederController } from './seeder.controller';
 import { ConfigModule } from '@nestjs/config';
+import { Branch } from 'src/branches/entities/branch.entity';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }),TypeOrmModule.forFeature([Company, User, Role, Permission])],
+  imports: [ConfigModule.forRoot({ isGlobal: true }),TypeOrmModule.forFeature([Company,Branch, User, Role, Permission])],
   providers: [SeederService],
   exports: [SeederService],
   controllers: [SeederController],

@@ -1,3 +1,4 @@
+import { Customer } from 'src/customers/entities/customer.entity';
 import { BaseEntity } from 'src/utils/base.entity';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
 
@@ -14,6 +15,9 @@ export class AdminHierarchy extends BaseEntity{
 
   @Column()
   admin_level: number; 
+
+  @OneToMany(() => Customer,(customer)=>customer.adminHierarchy)
+  customers: Customer[];
 
   // Self-referencing ManyToOne relationship (a hierarchy can have one parent)
   @ManyToOne(() => AdminHierarchy, (adminHierarchy) => adminHierarchy.children, {

@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsEmail, IsArray, IsInt, IsUUID, IsOptional, IsBoolean, MinLength } from 'class-validator';
+import { IsString, IsNotEmpty, IsEmail, IsArray, IsInt, IsUUID, IsOptional, IsBoolean, MinLength, Matches } from 'class-validator';
 export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
@@ -12,15 +12,24 @@ export class CreateUserDto {
   @IsNotEmpty()
   @MinLength(8, { message: 'Password must be at least 8 characters long' })
   password: string;
-
+  
+  @IsString()
+  @IsNotEmpty()
+  @Matches(/^\+?[1-9]\d{1,14}$/, { message: 'Phone number must be a valid international phone number (e.g., +255234567890)' })
+  phone: string;
+  
   @IsArray()
   @IsInt({ each: true })
   @IsOptional()
-  roleIds?: number[];
+  roleIds?: string[];
 
-  @IsInt()
+  @IsString()
   @IsNotEmpty()
-  companyId: number;
+  branchId: string;
+  
+  @IsString()
+  @IsNotEmpty()
+  companyId: string;
 
   @IsBoolean()
   @IsOptional()

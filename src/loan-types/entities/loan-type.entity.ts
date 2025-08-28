@@ -1,4 +1,7 @@
 import { BaseEntity } from "src/utils/base.entity";
-import { Entity } from "typeorm";
+import { Column, Entity } from "typeorm";
 @Entity('loan_types')
-export class LoanType extends BaseEntity{}
+export class LoanType extends BaseEntity{
+    @Column({ unique: true })
+    name: string;
+}

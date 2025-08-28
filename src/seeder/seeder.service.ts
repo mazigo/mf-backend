@@ -6,6 +6,7 @@ import { Permission } from '../permissions/entities/permission.entity';
 import { Role } from '../roles/entities/role.entity';
 import { User } from '../users/entities/user.entity';
 import { Repository } from 'typeorm';
+import { Branch } from 'src/branches/entities/branch.entity';
 
 @Injectable()
 export class SeederService {
@@ -18,23 +19,25 @@ export class SeederService {
     private readonly roleRepository: Repository<Role>,
     @InjectRepository(Permission)
     private readonly permissionRepository: Repository<Permission>,
+    @InjectRepository(Branch)
+    private readonly branchRepository: Repository<Branch>,
   ) {}
 async seedInitialData() {
     // Step 1: Seed Permissions
     const permissions = [
-      { name: 'create:companies' },
-      { name: 'read:companies' },
-      { name: 'update:companies' },
-      { name: 'delete:companies' },
-      { name: 'create:users' },
-      { name: 'read:users' },
-      { name: 'update:users' },
-      { name: 'delete:users' },
-      { name: 'assign:roles' },
-      { name: 'create:roles' },
-      { name: 'read:roles' },
-      { name: 'update:roles' },
-      { name: 'delete:roles' },
+      { name: 'create:companies',description:'Create companies'},
+      { name: 'read:companies',description:'Read companies'},
+      { name: 'update:companies' ,description:'Update companies'},
+      { name: 'delete:companies',description:'Delete companies'},
+      { name: 'create:users',description:'Create users'},
+      { name: 'read:users',description:'Read users'},
+      { name: 'update:users',description:'Update users'},
+      { name: 'delete:users',description:'Delete users'},
+      { name: 'assign:roles',description:'Create roles'},
+      { name: 'create:roles',description:'Create roles'},
+      { name: 'read:roles',description:'Read roles'},
+      { name: 'update:roles',description:'Update roles'},
+      { name: 'delete:roles',description:'Delete roles'},
       // Add more permissions as needed
     ];
 
@@ -52,6 +55,7 @@ async seedInitialData() {
     if (!superAdminRole) {
       superAdminRole = this.roleRepository.create({
         name: 'super_admin',
+        description:'Create companies and company admins',
         permissions: createdPermissions, // Assign all permissions
         is_active: true,
       });
@@ -67,6 +71,7 @@ async seedInitialData() {
     if (!companyAdminRole) {
       companyAdminRole = this.roleRepository.create({
         name: 'company_admin',
+        description:'Manage company level setups',
         permissions: companyAdminPermissions,
         is_active: true,
       });
@@ -83,7 +88,21 @@ async seedInitialData() {
       await this.companyRepository.save(systemCompany);
     }
 
-    // Step 5: Seed Super Admin User
+    // Step 5: Seed Initial Main branch
+    let systemBranch = await this.branchRepository.findOneBy({ name: 'Main' });
+    if (!systemBranch) {
+      systemBranch = this.branchRepository.create({
+        name: 'Main',
+        address:'Ntyuka Dodoma',
+        phone:'255759003238',
+        email:'info@main.com',
+        company:systemCompany,
+        is_active: true,
+      });
+      await this.branchRepository.save(systemBranch);
+    }
+
+    // Step 6: Seed Super Admin User
     const superAdminEmail = 'superadmin@example.com';
     let superAdminUser = await this.userRepository.findOneBy({ email: superAdminEmail });
     if (!superAdminUser) {
@@ -92,7 +111,9 @@ async seedInitialData() {
         fullName: 'Super Admin',
         email: superAdminEmail,
         password: hashedPassword,
-        company: systemCompany,
+        branch: systemBranch,
+        company:systemCompany,
+        phone:'255759003238',
         roles: [superAdminRole],
         is_active: true,
       });

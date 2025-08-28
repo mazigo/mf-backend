@@ -1,26 +1,67 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateLoanTypeDto } from './dto/create-loan-type.dto';
 import { UpdateLoanTypeDto } from './dto/update-loan-type.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { LoanType } from './entities/loan-type.entity';
 
 @Injectable()
 export class LoanTypesService {
-  create(createLoanTypeDto: CreateLoanTypeDto) {
-    return 'This action adds a new loanType';
+  constructor(
+    @InjectRepository(LoanType)
+    private readonly loanTypeRepository: Repository<LoanType>,
+  ) {}
+async findAll(): Promise<LoanType[]> {
+    return await this.loanTypeRepository.find();
   }
 
-  findAll() {
-    return `This action returns all loanTypes`;
+  async findOne(id: string): Promise<LoanType> {
+    const loanType = await this.loanTypeRepository.findOne({ where: { id } });
+    if (!loanType) {
+      throw new NotFoundException(`LoanType with ID ${id} not found`);
+    }
+    return loanType;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} loanType`;
+  async findByName(name: string): Promise<LoanType> {
+    const loanType = await this.loanTypeRepository.findOne({ where: { name } });
+    if (!loanType) {
+      throw new NotFoundException(`LoanType with name ${name} not found`);
+    }
+    return loanType;
   }
 
-  update(id: number, updateLoanTypeDto: UpdateLoanTypeDto) {
-    return `This action updates a #${id} loanType`;
+  async create(createLoanTypeDto: CreateLoanTypeDto): Promise<LoanType> {
+    const existingLoanType = await this.loanTypeRepository.findOne({
+      where: { name: createLoanTypeDto.name },
+    });
+
+    if (existingLoanType) {
+      throw new NotFoundException(`LoanType with name ${createLoanTypeDto.name} already exists`);
+    }
+
+    const loanType = this.loanTypeRepository.create(createLoanTypeDto);
+    return await this.loanTypeRepository.save(loanType);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} loanType`;
+  async update(id: string, updateLoanTypeDto: UpdateLoanTypeDto): Promise<LoanType> {
+    const loanType = await this.findOne(id);
+    
+    if (updateLoanTypeDto.name && updateLoanTypeDto.name !== loanType.name) {
+      const existingLoanType = await this.loanTypeRepository.findOne({
+        where: { name: updateLoanTypeDto.name },
+      });
+      if (existingLoanType) {
+        throw new NotFoundException(`LoanType with name ${updateLoanTypeDto.name} already exists`);
+      }
+    }
+
+    Object.assign(loanType, updateLoanTypeDto);
+    return await this.loanTypeRepository.save(loanType);
+  }
+
+  async remove(id: string): Promise<void> {
+    const loanType = await this.findOne(id);
+    await this.loanTypeRepository.remove(loanType);
   }
 }

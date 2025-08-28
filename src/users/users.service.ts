@@ -7,9 +7,11 @@ import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { Company } from 'src/companies/entities/company.entity';
 import { Role } from 'src/roles/entities/role.entity';
+import { Branch } from 'src/branches/entities/branch.entity';
 
 @Injectable()
-export class UsersService {
+export class UsersService { 
+  usersRepository: any;
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
@@ -17,10 +19,12 @@ export class UsersService {
     private companyRepository: Repository<Company>,
     @InjectRepository(Role)
     private readonly roleRepository: Repository<Role>,
+    @InjectRepository(Branch)
+    private branchRepository: Repository<Branch>,
   ){}
 
   async create(createUserDto: CreateUserDto, currentUser: User) {
-    const { companyId,email, roleIds, password, ...rest } = createUserDto;
+    const { companyId,branchId,email, roleIds, password, ...rest } = createUserDto;
     // Check if email already exists
     const existingUser = await this.userRepository.findOneBy({ email });
     if (existingUser) {
@@ -33,16 +37,22 @@ export class UsersService {
       throw new NotFoundException('Company not found');
     }
 
+    // Check if branch exists
+    const branch = await this.branchRepository.findOneBy({ id: branchId });
+    if (!branch) {
+      throw new NotFoundException('Branch not found');
+    }
+
     if (
       currentUser.roles.some(role => role.name === 'company_admin') &&
-      currentUser.company.id !== companyId
+      currentUser.branch.id !== branchId
     ) {
       throw new ForbiddenException('Company admins can only create users for their own company');
     }
 
-    let roles= [];
+    let roles: Role[] = [];
     if (roleIds && roleIds.length > 0) {
-    let roles = await this.roleRepository.findByIds(roleIds);
+     roles = await this.roleRepository.findByIds(roleIds);
       if (roles.length !== roleIds.length) {
         throw new NotFoundException('One or more roles not found');
       }
@@ -54,6 +64,7 @@ export class UsersService {
     const user = this.userRepository.create({
       ...rest,
       password: hashedPassword,
+      branch,
       company,
       roles,
       is_active: createUserDto.is_active ?? true,
@@ -65,7 +76,7 @@ export class UsersService {
   async findAll() {
   return this.userRepository.find({
     select: ['id', 'fullName', 'email', 'is_active', 'createdAt', 'updatedAt'],
-     relations: ['company', 'roles']
+     relations: ['company','branch', 'roles.permissions']
      });
   }
 
@@ -73,7 +84,7 @@ export class UsersService {
     const user = await this.userRepository.findOne({
       where: { id },
       select: ['id', 'fullName', 'email', 'is_active', 'createdAt', 'updatedAt'],
-      relations: ['company', 'roles', 'roles.permissions'],
+      relations: ['company','branch', 'roles.permissions'],
     });
     if (!user) {
       throw new NotFoundException('User not found');
@@ -82,16 +93,16 @@ export class UsersService {
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
-    const { companyId, roleIds, password, ...rest } = updateUserDto;
+    const { branchId, roleIds, password, ...rest } = updateUserDto;
 
     const user = await this.findOne(id);
 
-    if (companyId) {
-      const company = await this.companyRepository.findOneBy({ id: companyId });
-      if (!company) {
+    if (branchId) {
+      const branch = await this.branchRepository.findOneBy({ id: branchId });
+      if (!branch) {
         throw new NotFoundException('Company not found');
       }
-      user.company = company;
+      user.branch = branch;
     }
 
     if (roleIds) {

@@ -1,6 +1,7 @@
 import { BaseEntity } from "src/utils/base.entity";
-import { Entity } from "typeorm";
+import { Column, Entity } from "typeorm";
 @Entity('loan_purposes')
 export class LoanPurpose extends BaseEntity{
-    
+    @Column({ unique: true })
+    name: string;
 }

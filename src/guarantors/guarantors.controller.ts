@@ -19,16 +19,16 @@ export class GuarantorsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.guarantorsService.findOne(+id);
+    return this.guarantorsService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateGuarantorDto: UpdateGuarantorDto) {
-    return this.guarantorsService.update(+id, updateGuarantorDto);
+    return this.guarantorsService.update(id, updateGuarantorDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.guarantorsService.remove(+id);
+    return this.guarantorsService.remove(id);
   }
 }

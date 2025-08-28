@@ -19,16 +19,16 @@ export class InterestTypeController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.interestTypeService.findOne(+id);
+    return this.interestTypeService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateInterestTypeDto: UpdateInterestTypeDto) {
-    return this.interestTypeService.update(+id, updateInterestTypeDto);
+    return this.interestTypeService.update(id, updateInterestTypeDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.interestTypeService.remove(+id);
+    return this.interestTypeService.remove(id);
   }
 }

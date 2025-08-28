@@ -25,9 +25,9 @@ export class CreateBranchDto {
   @IsOptional()
   managerId?: string;
 
-  @IsInt()
+  @IsString()
   @IsNotEmpty()
-  companyId: number;
+  companyId: string;
 
   @IsBoolean()
   @IsOptional()
